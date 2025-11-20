@@ -4,7 +4,7 @@ class Userpost {
   final String time;
   final String postcontent;
   final String postimg;
-  final String numcomments;
+  String numcomments; 
   final String numshare;
   bool isLiked;
 

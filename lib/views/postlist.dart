@@ -25,11 +25,11 @@ class _PostlistState extends State<Postlist> {
     children: [
       TextButton.icon(
         style: TextButton.styleFrom(
-          foregroundColor: (userPost.isLiked) ? Colors. blue : Colors.grey,
+          foregroundColor: (userPost.isLiked) ? Colors.blue : Colors.grey,
         ),
         onPressed: () {
           setState(() {
-            userPost.isLiked = (userPost.isLiked) ? false : true;
+            userPost.isLiked = !userPost.isLiked;
           });
         },
         icon: const Icon(Icons.thumb_up),
@@ -37,7 +37,9 @@ class _PostlistState extends State<Postlist> {
       ),
       TextButton.icon(
         style: TextButton.styleFrom(foregroundColor: Colors.grey),
-        onPressed: () {},
+        onPressed: () {
+          gotoPage(context, ProfileView(userPost: userPost));
+        },
         icon: const Icon(Icons.message),
         label: const Text('Comment'),
       ),
@@ -118,19 +120,20 @@ class _PostlistState extends State<Postlist> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: ListView(
-        shrinkWrap: true,
-        children: widget.userdata.userList.map((userPost){
-          return InkWell(
-            onTap: () {
-              gotoPage(context, ProfileView(userPost: userPost));
-            },
-            child: showPost(userPost),
-          );
-        }).toList(),
-      ),
+   
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: widget.userdata.userList.length,
+      itemBuilder: (context, index) {
+        final userPost = widget.userdata.userList[index];
+        return InkWell(
+          onTap: () {
+            gotoPage(context, ProfileView(userPost: userPost));
+          },
+          child: showPost(userPost),
+        );
+      },
     );
   }
 }
